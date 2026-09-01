@@ -6,7 +6,7 @@ describe("Board eliminar líneas", () => {
   test("elimina una línea completa y baja el resto", () => {
     const board = new Board();
 
-    board.grilla[19] = "X".repeat(10);          //completo la última fila con bloques
+    board.grilla[19] = "X".repeat(10);          //se completa la última fila con bloques
 
     board.eliminarLineasCompletas();
 
@@ -29,7 +29,7 @@ describe("Board pieza aleatoria", () => {
     const board = new Board();
     const pieza = new PiezaCuadrado();
 
-    vi.spyOn(Math, "random").mockReturnValue(0);        //mockeo Math.random para que devuelva siempre 0 
+    vi.spyOn(Math, "random").mockReturnValue(0); 
     board.agregarPiezaAleatoria(pieza);
 
     expect(board.grilla[0]).toBe("XX........");             //con random en 0: 0 rotaciones y columna 0
