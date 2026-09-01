@@ -18,7 +18,7 @@ describe("Board - mover pieza actual", () => {
     const board = new Board();
     const pieza = new PiezaCuadrado();
 
-    // la coloco pegada al fondo (asumiendo pieza de 2 filas de alto)
+    // se coloca pegada al fondo (asumiendo pieza de 2 filas de alto)
     board.agregarPiezaActual(pieza, board.alto - 2, 4);
     const semovio = board.moverAbajo();
 
