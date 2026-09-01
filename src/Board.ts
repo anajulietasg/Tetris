@@ -34,13 +34,14 @@ export class Board {
           filaTablero >= this._alto ||
           columnaTablero < 0 ||
           columnaTablero >= this._ancho;
+        const estaOcupado =
+          !seSale && this._grilla[filaTablero][columnaTablero] === "X";
 
-        if (esBloque && seSale) {            //si es un bloque Y se sale
+        if (esBloque && (seSale || estaOcupado)) {            //si es un bloque Y se sale O está ocupado
           cabe = false;
         }
       }
     }
-
     return cabe;
   }
 
@@ -60,23 +61,27 @@ export class Board {
     this._columnaActual = columnaInicio;
     return true;
   }
+  //la pieza actual queda fija en el tablero
+  fijarPieza(): void {
+    this._piezaActual = null;    //ya no hay pieza cayendo
+  }
 
   //mueve la pieza actual una fila hacia abajo, solo si entra en la nueva posición
   moverAbajo(): boolean {
     if (!this._piezaActual) {
       return false;                          //no hay pieza actual
     }
-
-    const filaNueva = this._filaActual + 1;      //baja
-
-    if (!this.entra(this._piezaActual, filaNueva, this._columnaActual)) {
-      return false;                          //no cabe una fila más abajo, se queda donde está
-    }
-
     this.borrarPieza(this._piezaActual, this._filaActual, this._columnaActual);
-    this.colocarPieza(this._piezaActual, filaNueva, this._columnaActual);
-    this._filaActual = filaNueva;
-    return true;
+    const filaNueva = this._filaActual + 1;      //baja
+    const puedeBajar = this.entra(this._piezaActual, filaNueva, this._columnaActual);
+
+    const filaFinal = puedeBajar ? filaNueva : this._filaActual;     //si puedeBajar, entonces filaNueva, si no, filaActual
+
+    this.colocarPieza(this._piezaActual, filaFinal, this._columnaActual);
+    this._filaActual = filaFinal;
+
+    return puedeBajar;
+
   }
 
   //borra los bloques de una pieza de la grilla (los vuelve a poner en ".")
@@ -84,7 +89,6 @@ export class Board {
     this.dibujarPieza(pieza, filaInicio, columnaInicio, ".");
   }
 
-  //dibuja el carácter indicado ("X" para colocar, "." para borrar) en cada bloque de la pieza
   private dibujarPieza(
     pieza: PiezaBase,
     filaInicio: number,
@@ -125,7 +129,7 @@ export class Board {
 
   //agrega una pieza rotándola al azar y en una columna al azar, sin salirse
   agregarPiezaAleatoria(pieza: PiezaBase): void {
-    //rota la pieza una cantidad de veces al azar (entre 0-3)
+    //rota la pieza una cantidad de veces al azar (0-3)
     const vueltas = Math.floor(Math.random() * 4);
     for (let v = 0; v < vueltas; v++) {
       pieza.rotateRight();

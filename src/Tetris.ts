@@ -12,7 +12,7 @@ export class Tetris {
   private _clock: Clock = new Clock();      //el reloj
   private _terminado: boolean = false;      //si el juego terminó o no
 
-  //empieza el juego metiendo la primera pieza
+  //mete la primera pieza
   start(): void {
     this.nuevaPieza();
   }
@@ -23,7 +23,7 @@ export class Tetris {
     const sePudo = this._board.agregarPiezaActual(pieza, 0, 4);
 
     if (!sePudo) {
-      this._terminado = true;    //si no entra la pieza nueva, se acabó el juego
+      this._terminado = true;    //si no entra la pieza nueva, termina
     }
   }
 
@@ -39,18 +39,22 @@ export class Tetris {
     const indice = Math.floor(Math.random() * piezas.length);
     return piezas[indice];
   }
-
-  //un tic del reloj: baja la pieza actual una fila
+  //en cada tick baja la pieza, si no puede la fija y trae una nueva
   tick(): void {
     if (this._terminado) {
-      return;                    //si terminó, no hace nada
+      return;                        //terminó
     }
+    this._clock.tick();
 
-    this._clock.tick();          //avanza el reloj
-    this._board.moverAbajo();    //baja la pieza actual (método de tu compañera)
+    const pudoBajar = this._board.moverAbajo();   //intenta bajar la pieza
+
+    if (!pudoBajar) {
+      this._board.fijarPieza();             //la pieza tocó fondo, queda fija
+      this._board.eliminarLineasCompletas(); //revisa si se completó alguna linea
+      this.nuevaPieza();                    //trae una pieza nueva
+    }
   }
 
-  //getters para leer el estado desde afuera y para los tests
   get terminado(): boolean {
     return this._terminado;
   }

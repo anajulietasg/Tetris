@@ -24,4 +24,15 @@ describe("Tetris", () => {
     tetris.tick();
     expect(tetris.terminado).toBe(false);
   });
+  
+    test("el juego termina cuando se llena el tablero", () => {
+    const tetris = new Tetris();
+    tetris.start();
+
+    for (let i = 0; i < 500; i++) {
+      tetris.tick();
+    }
+
+    expect(tetris.terminado).toBe(true);              //después de tantos ticks, comprueba que se haya terminado el juego
+  });
 });
