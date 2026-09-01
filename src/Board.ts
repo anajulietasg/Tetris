@@ -51,7 +51,7 @@ export class Board {
   //agrega la pieza al tablero Y la marca como "pieza actual" (la que está cayendo)
   agregarPiezaActual(pieza: PiezaBase, filaInicio: number, columnaInicio: number): boolean {
     if (!this.entra(pieza, filaInicio, columnaInicio)) {
-      return false;                          //no entra, no se agrega (Requerimiento 3.2 y 4)
+      return false;                          //no entra, no se agrega 
     }
 
     this.colocarPieza(pieza, filaInicio, columnaInicio);
@@ -64,10 +64,10 @@ export class Board {
   //mueve la pieza actual una fila hacia abajo, solo si entra en la nueva posición
   moverAbajo(): boolean {
     if (!this._piezaActual) {
-      return false;                          //no hay pieza actual, no hay nada que mover
+      return false;                          //no hay pieza actual
     }
 
-    const filaNueva = this._filaActual + 1;
+    const filaNueva = this._filaActual + 1;      //baja
 
     if (!this.entra(this._piezaActual, filaNueva, this._columnaActual)) {
       return false;                          //no cabe una fila más abajo, se queda donde está
@@ -107,9 +107,36 @@ export class Board {
       }
     }
   }
+  //elimina las filas que están completas (sin ningún punto) y baja el resto
+  eliminarLineasCompletas(): void {
+    const filasQueQuedan = this._grilla.filter((fila) => fila.includes("."));  
 
+    const eliminadas = this._alto - filasQueQuedan.length; //cuántas filas se eliminaron
+
+    const filasVacias = Array.from(             //arma nuevas filas 
+      { length: eliminadas },
+      () => ".".repeat(this._ancho)
+    );
+    this._grilla = [...filasVacias, ...filasQueQuedan];
+  }
   private reemplazarCaracter(fila: string, posicion: number, caracter: string): string {
     return fila.substring(0, posicion) + caracter + fila.substring(posicion + 1);
+  }
+
+  //agrega una pieza rotándola al azar y en una columna al azar, sin salirse
+  agregarPiezaAleatoria(pieza: PiezaBase): void {
+    //rota la pieza una cantidad de veces al azar (entre 0-3)
+    const vueltas = Math.floor(Math.random() * 4);
+    for (let v = 0; v < vueltas; v++) {
+      pieza.rotateRight();
+    }
+
+    const anchoPieza = Math.max(...pieza.forma.map((fila) => fila.length));         //calcula el ancho de la pieza ya rotada y ve que no se salga
+    const columnaMaxima = this._ancho - anchoPieza;
+
+    const columna = Math.floor(Math.random() * (columnaMaxima + 1));       ////elige una columna al azar
+
+    this.agregarPiezaActual(pieza, 0, columna);
   }
 
   get ancho(): number {
