@@ -128,7 +128,7 @@ export class Board {
   }
 
   //agrega una pieza rotándola al azar y en una columna al azar, sin salirse
-  agregarPiezaAleatoria(pieza: PiezaBase): void {
+  agregarPiezaAleatoria(pieza: PiezaBase): boolean {
     //rota la pieza una cantidad de veces al azar (0-3)
     const vueltas = Math.floor(Math.random() * 4);
     for (let v = 0; v < vueltas; v++) {
@@ -140,7 +140,7 @@ export class Board {
 
     const columna = Math.floor(Math.random() * (columnaMaxima + 1));       ////elige una columna al azar
 
-    this.agregarPiezaActual(pieza, 0, columna);
+    return this.agregarPiezaActual(pieza, 0, columna);
   }
 
   get ancho(): number {

@@ -17,10 +17,10 @@ export class Tetris {
     this.nuevaPieza();
   }
 
-  //mete una pieza nueva al azar. Si no entra, el juego termina
+  //mete una pieza nueva al azar. Si no entra, termina
   private nuevaPieza(): void {
     const pieza = this.piezaAleatoria();
-    const sePudo = this._board.agregarPiezaActual(pieza, 0, 4);
+    const sePudo = this._board.agregarPiezaAleatoria(pieza);    //columna aleatoria
 
     if (!sePudo) {
       this._terminado = true;    //si no entra la pieza nueva, termina
