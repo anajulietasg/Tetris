@@ -37,4 +37,25 @@ describe("Board pieza aleatoria", () => {
 
     vi.restoreAllMocks();   //devuelvo Math.random a la normalidad
   });
+
+  test("eliminarLineasCompletas cuenta correctamente las líneas eliminadas", () => {
+    const board = new Board();
+
+    for (let i = 15; i < 20; i++) {               //lleno 5 filas completas 
+      board.grilla[i] = "X".repeat(10);
+    }
+
+    const eliminadas = board.eliminarLineasCompletas();
+
+    expect(eliminadas).toBe(5);   //eliminó las 5 líneas
+  });
+
+  test("eliminarLineasCompletas devuelve 0 si no hay líneas completas", () => {
+    const board = new Board();
+    board.grilla[19] = "XXXXX.....";   //fila incompleta
+
+    const eliminadas = board.eliminarLineasCompletas();
+
+    expect(eliminadas).toBe(0);   //no elimina
+  });
 });

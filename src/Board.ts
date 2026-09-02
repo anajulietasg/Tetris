@@ -112,7 +112,7 @@ export class Board {
     }
   }
   //elimina las filas que están completas (sin ningún punto) y baja el resto
-  eliminarLineasCompletas(): void {
+  eliminarLineasCompletas(): number {
     const filasQueQuedan = this._grilla.filter((fila) => fila.includes("."));  
 
     const eliminadas = this._alto - filasQueQuedan.length; //cuántas filas se eliminaron
@@ -122,7 +122,9 @@ export class Board {
       () => ".".repeat(this._ancho)
     );
     this._grilla = [...filasVacias, ...filasQueQuedan];
+    return eliminadas;                           //num lineas eliminadas
   }
+
   private reemplazarCaracter(fila: string, posicion: number, caracter: string): string {
     return fila.substring(0, posicion) + caracter + fila.substring(posicion + 1);
   }

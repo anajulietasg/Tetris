@@ -8,6 +8,9 @@ import { PiezaL } from "./PiezaL";
 import { PiezaPerro } from "./PiezaPerro";
 
 export class Tetris {
+  private _lineasEliminadas: number = 0;
+  private _gano: boolean = false;
+  private _lineasParaGanar: number = 5;
   private _board: Board = new Board();      //el tablero del juego
   private _clock: Clock = new Clock();      //el reloj
   private _terminado: boolean = false;      //si el juego terminó o no
@@ -50,8 +53,14 @@ export class Tetris {
 
     if (!pudoBajar) {
       this._board.fijarPieza();             //la pieza tocó fondo, queda fija
-      this._board.eliminarLineasCompletas(); //revisa si se completó alguna linea
-      this.nuevaPieza();                    //trae una pieza nueva
+      const eliminadas = this._board.eliminarLineasCompletas(); //revisa si se completó alguna linea
+      this._lineasEliminadas += eliminadas;
+      if (this._lineasEliminadas >= this._lineasParaGanar) {
+        this._gano = true;
+        this._terminado = true;    
+      } else {
+        this.nuevaPieza();         //trae nueva pieza 
+      }
     }
   }
 
@@ -61,5 +70,13 @@ export class Tetris {
 
   get board(): Board {
     return this._board;
+  }
+
+    get gano(): boolean {
+    return this._gano;
+  }
+
+  get lineasEliminadas(): number {
+    return this._lineasEliminadas;
   }
 }
