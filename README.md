@@ -1,4 +1,4 @@
-# Tetris - Paradigmas y Lenguajes de Programación II
+# Tetris 
 
 ## Integrantes
 

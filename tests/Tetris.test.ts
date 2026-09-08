@@ -63,4 +63,20 @@ describe("Tetris", () => {
 
     expect(tetris.gano).toBe(false);   //no gana
   });
+
+  test("el juego se gana cuando se completan 5 líneas", () => {
+    const tetris = new Tetris();
+    tetris.start();
+
+    for (let i = 15; i < 20; i++) {                 //lleno 5 filas completas
+      tetris.board.grilla[i] = "X".repeat(10);
+    }
+
+    for (let i = 0; i < 25; i++) {                  //hago ticks para que el juego procese esas líneas y las cuente
+      tetris.tick();
+      if (tetris.gano) break;   //si ya ganó, corto
+    }
+
+    expect(tetris.gano).toBe(true);
+  });
 });
