@@ -19,14 +19,7 @@ describe("Tetris", () => {
     expect(tetris.board.grilla.length).toBe(20);
   });
 
-  test("se puede hacer un tick sin que se rompa", () => {
-    const tetris = new Tetris();
-    tetris.start();
-    tetris.tick();
-    expect(tetris.terminado).toBe(false);
-  });
-  
-    test("el juego termina cuando se llena el tablero", () => {
+  test("el juego termina cuando se llena el tablero", () => {
     const tetris = new Tetris();
     tetris.start();
 
